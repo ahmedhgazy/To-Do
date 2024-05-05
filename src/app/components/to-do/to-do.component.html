@@ -1,0 +1,122 @@
+<div class="container">
+  <div class="row">
+    <h3 class="text-center mt-5 fs-2 text-dark">
+      To-do-app with drag and drop
+    </h3>
+    <div class="col-12">
+      <div class="row">
+        <div class="col-12">
+          <form
+            class="offset-2"
+            style="width: 60%"
+            #form="ngForm"
+            (ngSubmit)="onSubmit()"
+          >
+            <div class="input-group mt-3">
+              <input
+                type="text"
+                #task
+                maxlength="26"
+                class="form-control"
+                placeholder="Add task"
+                required
+                ngModel
+                name="task"
+              />
+              <button
+                type="submit"
+                class="btn"
+                [ngClass]="editMode ? 'btn-success' : 'btn-primary'"
+              >
+                {{ editMode ? "Update" : "Add" }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="row mt-4" cdkDropListGroup>
+        <div class="col-12 col-md-6 pe-5 pb-3" style="background-color: #ddd">
+          <div class="row">
+            <h3 class="text-center mt-2">Tasks</h3>
+          </div>
+          <div class="col-12 offset-1 ps-0 me-0 ms-4">
+            <ul
+              class="list-group list-group-flush"
+              #tasksList="cdkDropList"
+              cdkDropList
+              [cdkDropListData]="tasks"
+              (cdkDropListDropped)="drop($event)"
+              [cdkDropListConnectedTo]="[doneList]"
+            >
+              <li
+                cdkDrag
+                class="p-1 list-group-item me-2"
+                *ngIf="tasks.length == 0"
+              >
+                <p class="p-2">Empty List</p>
+              </li>
+
+              <li
+                cdkDrag
+                class="list-group-item example-box me-2 d-flex p-4 justify-content-between align-items-center"
+                *ngFor="let task of tasks; let i = index"
+              >
+                <p class="center p-2 me-5 text-truncate float-start">
+                  {{ task }}
+                </p>
+                <button
+                  class="button-right"
+                  mat-stroked-button
+                  color="warn"
+                  (click)="removeItem(i)"
+                >
+                  remove
+                </button>
+                <button
+                  class="me-4 button-right-right"
+                  mat-stroked-button
+                  color="primary"
+                  (click)="editTask(i)"
+                >
+                  Edit
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 pe-5 pb-3" style="background-color: #ddd">
+          <div class="row">
+            <h3 class="text-center mt-2">Inprogress Tasks</h3>
+          </div>
+          <div class="col-12 offset-1 offset-1 ps-0 me-0 ms-4">
+            <ul
+              #doneList="cdkDropList"
+              class="list-group list-group-flush"
+              cdkDropList
+              [cdkDropListData]="inProgressTasks"
+              [cdkDropListConnectedTo]="[tasksList]"
+              (cdkDropListDropped)="drop($event)"
+            >
+              <li
+                cdkDrag
+                class="p-1 list-group-item me-2"
+                *ngIf="inProgressTasks.length == 0"
+              >
+                <p class="p-2">Empty List</p>
+              </li>
+              <li
+                cdkDrag
+                class="list-group-item me-2 d-flex p-4 justify-content-between align-items-center"
+                *ngFor="let task of inProgressTasks"
+              >
+                <p cdkDrag class="center p-2 me-5 text-truncate float-start">
+                  {{ task }}
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
